@@ -13,13 +13,13 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Mirror
+  - BackGround
+  - ParticleEffect
+  - ParticleUI
+  - Bloom
+  - Movie
+  - BG
   - 
   - 
   - 
