@@ -79,17 +79,9 @@ namespace ProjectS
             while (!task.IsCompleted) { yield return null; }
             isLoading = false;
         }
-
-        // private void Pause()
-        // {
-        //     if (state != State.Running) return;
-        //
-        //     iTween.Pause();
-        //     state = State.Pausing;
-        //     Time.timeScale = 0f;
-        //     var obj = Instantiate(PauseDialogPrefab);
-        //     _pauseDialog = obj.GetComponent<PauseDialog>();
-        // }
+        
+        // ポーズ処理をはじめとする、何らかの共通処理を書きたい
+        // が、ポーズ処理不要説やゲームの規模を大きくしすぎないために、処理を大幅カットするかも
         
         #endregion
     }
