@@ -58,6 +58,13 @@ namespace ProjectS
             UpdateMain();
         }
         
+        protected void OnDestroy()
+        {
+            iTween.Stop();
+            iTween.tweens.Clear();
+            InputObserver.Instance.ClearEvents();
+        }
+        
         #endregion
 
         #region Method

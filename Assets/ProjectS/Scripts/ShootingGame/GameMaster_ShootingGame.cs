@@ -13,21 +13,28 @@ namespace ProjectS
         [SerializeField]
         private TimeView timeView;
         [SerializeField]
-        private ScoreView scoreView;
+        private ScoreView scoreViewPlayer1;
+        [SerializeField]
+        private ScoreView scoreViewPlayer2;
         [SerializeField]
         private ScoreView scoreViewCpu;
+        
+        // いらないかも
         [SerializeField]
         private EnemyOrderListView enemyOrderListView;
+        
         [SerializeField]
         private GameObject enemyOrder;
+        private GameObject enemyPrefab;
         [SerializeField]
-        private GameObject redPrefab;
+        private GameObject leftContainer;
         [SerializeField]
-        private GameObject container;
+        private GameObject rightContainer;
         [SerializeField]
         private GameObject overlayCanvas;
         private ViewModel_ShootingGame _viewModel = new ViewModel_ShootingGame();
-        private EnemyController _enemy;
+        private EnemyController _leftEnemy;
+        private EnemyController _rightEnemy;
         private GameObject _hitEffect;
         private GameObject _missEffect;
         [SerializeField]
@@ -48,12 +55,20 @@ namespace ProjectS
             // {
             //     if (display) ShowCountDown();
             // };
-            _viewModel.ScoreViewDisplayState.OnChange += scoreView.gameObject.SetActive;
-            _viewModel.Score.OnChange += scoreView.SetScore;
+            _viewModel.Score1ViewDisplayState.OnChange += scoreViewPlayer1.gameObject.SetActive;
+            _viewModel.Score1.OnChange += scoreViewPlayer1.SetScore;
             
             if (GameDataStore.Instance.PlayerNum == 1)
             {
                 // CPU
+                _viewModel.Score2ViewDisplayState.OnChange += scoreViewCpu.gameObject.SetActive;
+                _viewModel.Score2.OnChange += scoreViewCpu.SetScore;
+            }
+            else
+            {
+                // 二人対戦やりたいから作ってみる
+                _viewModel.Score2ViewDisplayState.OnChange += scoreViewPlayer2.gameObject.SetActive;
+                _viewModel.Score2.OnChange += scoreViewPlayer2.SetScore;
             }
             
             _viewModel.EnemyOrderListDisplayState.OnChange += enemyOrder.SetActive;
@@ -63,15 +78,19 @@ namespace ProjectS
             _viewModel.EnemyManager.Init();
             
             _viewModel.OnEscapeEnemy += EscapeAllEnemy;
-            _viewModel.OnDefeat += Defeat;
-            _viewModel.OnEscape += Escape;
+            _viewModel.OnDefeatPlayer1 += DefeatRight;
+            _viewModel.OnDefeatPlayer2 += DefeatLeft;
+            _viewModel.OnEscapePlayer1 += EscapeRight;
+            _viewModel.OnEscapePlayer2 += EscapeLeft;
             
             _viewModel.ResultDisplayState.OnChange += Result;
             
-            _viewModel.OnHit += ShowHitEffect;
-            _viewModel.OnMiss += ShowMissEffect;
+            _viewModel.OnHitPlayer1 += ShowHitEffectRight;
+            _viewModel.OnHitPlayer2 += ShowHitEffectLeft;
+            _viewModel.OnMissPlayer1 += ShowMissEffectLeft;
+            _viewModel.OnMissPlayer2 += ShowMissEffectRight;
             
-            _viewModel.OnLoadPrefabs += LoadPregabs;
+            _viewModel.OnLoadPrefabs += LoadPrefabs;
             _viewModel.SetPlayerNum(GameDataStore.Instance.PlayerNum);
             _viewModel.FinishDisplayState.OnChange += ShowFinish;
             
@@ -85,7 +104,7 @@ namespace ProjectS
                 Debug.Log(e);
                 StartLoadPhase();
             }
-            // 音を止めたい
+            // 鳴ってたらこの辺りで音を止めたい
         }
         
         protected override void UpdateMain()
@@ -113,7 +132,7 @@ namespace ProjectS
         
         private void StartCountDownPhase()
         {
-            // NeedRestartCountDown = false;
+            NeedRestartCountDown = false;
             
             playerSelect.SetActive(false);
             _currentPhase = new PhaseCountDown(_viewModel);
@@ -124,8 +143,9 @@ namespace ProjectS
         
         private void StartGamePhase()
         {
+            NeedRestartCountDown = true;
             // 音を鳴らしたい
-
+            
             _currentPhase = new PhaseGame(_viewModel);
             _currentPhase.OnEndPhase = StartFinishPhase;
             _currentPhase.Init();
@@ -154,7 +174,7 @@ namespace ProjectS
         {
             var prefab = ResourceStore.Instance.Get<GameObject>("StartCount");
             var obj = Instantiate(prefab, overlayCanvas.transform);
-            var cd = obj.GetComponent<CoundDownAnimation>();
+            var cd = obj.GetComponent<CountDownAnimation>();
             cd.SetVisible(true);
             cd.SetOnEndCallBack(StartGamePhase);
         }
@@ -163,7 +183,8 @@ namespace ProjectS
         {
             if (enemy.Type == EnemyType.Group)
             {
-                _enemy = SetEnemyTypeGroup(enemyPrefab, container);
+                _leftEnemy = SetEnemyTypeGroup(enemyPrefab, leftContainer);
+                _rightEnemy = SetEnemyTypeGroup(enemyPrefab, rightContainer);
                 // 音も鳴らしたい
             }
             else
@@ -181,28 +202,30 @@ namespace ProjectS
                                 prefab = enemyPrefab;
                                 break;
                             default:
-                                prefab = redPrefab;
+                                prefab = enemyPrefab;
                                 break;
                         }
                         // 音を鳴らしたい
                         break;
                     case EnemyType.Guard:
-                        prefab = redPrefab;
+                        prefab = enemyPrefab;
                         // 音を鳴らしたい
                         break;
                     case EnemyType.Danger:
-                        prefab = redPrefab;
+                        prefab = enemyPrefab;
                         // 音を鳴らしたい
                         break;
                 }
-                _enemy = SetEnemy(prefab, container);
+                _leftEnemy = SetEnemy(prefab, leftContainer);
+                _rightEnemy = SetEnemy(prefab, rightContainer);
             }
-            
-            _enemy.OnFinishedEnter = () =>
+
+            _leftEnemy.OnFinishedEnter = () =>
             {
                 _viewModel.AppearedEnemy();
             };
-            _enemy.StartEnterAnimation();
+            _leftEnemy.StartEnterAnimation();
+            _rightEnemy.StartEnterAnimation();
         }
         
         private EnemyController SetEnemy(GameObject prefab, GameObject container)
@@ -226,16 +249,22 @@ namespace ProjectS
             return controller;
         }
         
-        private void Escape()
+        private void EscapeLeft()
         {
-            EscapeEnemy(_enemy);
+            EscapeEnemy(_leftEnemy);
+        }
+        
+        private void EscapeRight()
+        {
+            EscapeEnemy(_rightEnemy);
         }
         
         private void EscapeEnemy(EnemyController enemy)
         {
             enemy.OnFinishedEscape = () =>
             {
-                DestroyImmediate(_enemy.gameObject);
+                DestroyImmediate(_leftEnemy.gameObject);
+                DestroyImmediate(_rightEnemy.gameObject);
                 _viewModel.EscapedEnemy();
             };
             enemy.StartEscapeAnimation();
@@ -247,24 +276,41 @@ namespace ProjectS
             {
                 // 音を鳴らしたい
             }
-            _enemy.OnFinishedEscape = () =>
+            _leftEnemy.OnFinishedEscape = () =>
             {
-                Destroy(_enemy.gameObject);
+                Destroy(_leftEnemy.gameObject);
+                Destroy(_rightEnemy.gameObject);
                 _viewModel.EscapedEnemy();
             };
-            _enemy.StartEscapeAnimation();
+            _leftEnemy.StartEscapeAnimation();
+            _rightEnemy.StartEscapeAnimation();
         }
         
-        private void Defeat()
+        private void DefeatLeft()
         {
             if (_viewModel.currentEnemy.Type != EnemyType.Danger)
             {
-                _enemy.StartDefeatAnimation();
+                _leftEnemy.StartDefeatAnimation();
                 // 音を鳴らしたい
             }
             else
             {
-                _enemy.StartEscapeAnimation();
+                _leftEnemy.StartEscapeAnimation();
+                // 音を鳴らしたい
+            }
+            _scoreGenerator.Instantiate(_viewModel.currentEnemy.Point, new Vector3(-700, 0, 0), Destroy);
+        }
+        
+        private void DefeatRight()
+        {
+            if (_viewModel.currentEnemy.Type != EnemyType.Danger)
+            {
+                _rightEnemy.StartDefeatAnimation();
+                // 音を鳴らしたい
+            }
+            else
+            {
+                _rightEnemy.StartEscapeAnimation();
                 // 音を鳴らしたい
             }
             _scoreGenerator.Instantiate(_viewModel.currentEnemy.Point, new Vector3(-700, 0, 0), Destroy);
@@ -272,7 +318,119 @@ namespace ProjectS
         
         private void Result(bool display)
         {
+            var prefab = ResourceStore.Instance.Get<GameObject>("GameResultAnimation");
+            var obj = Instantiate(prefab, overlayCanvas.transform);
+            var animator = obj.GetComponent<Animator>();
             
+            if (_viewModel.Score1.Value > _viewModel.Score2.Value)
+            {
+                animator.Play("1PWin");
+            }
+            else if (_viewModel.Score2.Value > _viewModel.Score1.Value)
+            {
+                if (GameDataStore.Instance.PlayerNum > 1) animator.Play("2PWin");
+                else animator.Play("CPUWin");
+            }
+            else
+            {
+                animator.Play("Draw");
+            }
+            
+            obj.GetComponent<AnimationEvent>().OnEnd = g => NextScene();
+        }
+        
+        private void ShowHitEffectRight()
+        {
+            // 効果音を鳴らしたい
+            Instantiate(_hitEffect, rightContainer.transform);
+        }
+        
+        private void ShowHitEffectLeft()
+        {
+            // 効果音を鳴らしたい
+            Instantiate(_hitEffect, leftContainer.transform);
+        }
+        
+        private void ShowMissEffectRight()
+        {
+            // 効果音を鳴らしたい
+            Instantiate(_missEffect, rightContainer.transform);
+        }
+        
+        private void ShowMissEffectLeft()
+        {
+            // 効果音を鳴らしたい
+            Instantiate(_missEffect, leftContainer.transform);
+        }
+        
+        private void ShowMissHitEffectRight()
+        {
+            Instantiate(_missEffect, rightContainer.transform);
+        }
+        
+        private void ShowMissHitEffectLeft()
+        {
+            Instantiate(_missEffect, leftContainer.transform);
+        }
+
+        private void DestroyEnemies()
+        {
+            if (_leftEnemy)
+            {
+                Destroy(_leftEnemy.gameObject);
+                _leftEnemy = null;
+            }
+
+            if (_rightEnemy)
+            {
+                Destroy(_rightEnemy.gameObject);
+                _rightEnemy = null;
+            }
+        }
+        
+        private void LoadPrefabs()
+        {
+            enemyPrefab = ResourceStore.Instance.Get<GameObject>("Enemy");
+            _hitEffect = ResourceStore.Instance.Get<GameObject>("PlayerAttackEffect");
+            _missEffect = ResourceStore.Instance.Get<GameObject>("PlayerMissEffect");
+            var generator = ResourceStore.Instance.Get<GameObject>("ScoreGenerator");
+            _scoreGenerator = Instantiate(_scoreGenerator).GetComponent<ScoreGenerator>();
+            _scoreGenerator.SetTargetCanvas(overlayCanvas);
+            
+            Instantiate(ResourceStore.Instance.Get<GameObject>("BackGround"), rightContainer.transform);
+            Instantiate(ResourceStore.Instance.Get<GameObject>("BackGround"), leftContainer.transform);
+        }
+        
+        private void ShowFinish(bool state)
+        {
+            if (state)
+            {
+                var prefab = ResourceStore.Instance.Get<GameObject>("GameFinish");
+                var obj = Instantiate(prefab, overlayCanvas.transform);
+                obj.SetActive(true);
+                _finishObject = obj;
+            }
+            else
+            {
+                if (_finishObject != null)
+                {
+                    Destroy(_finishObject);
+                    _finishObject = null;
+                }
+            }
+        }
+        
+        private void NextScene()
+        {
+            FadeManager.Instance.FadeOut(OnFinishFadeOut);
+        }
+        
+        private void OnFinishFadeOut()
+        {
+            // 今はこの辺は適当な名前でしかない
+            GameDataStore.Instance.NextSceneName = "HogeScene";
+            GameDataStore.Instance.AssetBundleLabel = "Hoge";
+            SceneManager.LoadScene("LoadScene");
         }
         
         #endregion

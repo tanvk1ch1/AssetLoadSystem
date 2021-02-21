@@ -32,6 +32,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 28dced086505e4949acfc32c1651c783, type: 2}
   - {fileID: 11400000, guid: 246250b4988a20945b08a5788ce1e4c8, type: 2}
   - {fileID: 11400000, guid: 6354c53931d57544eb744d4a8e85a3ed, type: 2}
+  - {fileID: 11400000, guid: d5a2937d18f5f2246a46a35dcae04715, type: 2}
+  - {fileID: 11400000, guid: 9cafec428ca37c74a9f2a7b3ba41ff36, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -73,9 +75,10 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - Game
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
-  - {fileID: 11400000, guid: d58c98d09e902124cb661a480d94d140, type: 2}
+  - {fileID: 11400000, guid: f1f61c60f3bef444ab494ab8dd3fea3b, type: 2}
   m_InitializationObjects: []
   m_CertificateHandlerType:
     m_AssemblyName: 

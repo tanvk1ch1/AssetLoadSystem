@@ -10,23 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Common
+  m_Name: Game
   m_EditorClassIdentifier: 
-  m_GroupName: Common
+  m_GroupName: Game
   m_Data:
     m_SerializedData: []
-  m_GUID: 95b6bbfe0ef4b804d8a982418fedc965
-  m_SerializeEntries:
-  - m_GUID: 0623d20b4eec14f49adb76dedd43d70b
-    m_Address: ScoreGenerator
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Game
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+  m_GUID: 12311e425e90a8343b9c27949fdef146
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5d9bfcb4682a39a4489f8b1c2c3b0e73, type: 2}
   m_SchemaSet:
-    m_Schemas:
-    - {fileID: 11400000, guid: 91165a96f305139409debe0b4454d2dd, type: 2}
-    - {fileID: 11400000, guid: cd8704152d62ee944b109e73d0585276, type: 2}
+    m_Schemas: []

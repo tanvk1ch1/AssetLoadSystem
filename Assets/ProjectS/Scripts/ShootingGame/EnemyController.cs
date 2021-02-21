@@ -34,6 +34,7 @@ namespace ProjectS
                 "easeType", "linear"
             ));
             
+            // AnimationTime - Delay + ShockTime = Time
             iTween.ShakeRotation(gameObject, iTween.Hash(
                 "x" , 10f,
                 "delay", EnemyConstants.EnemyAppearAnimationTime - 0.1f,

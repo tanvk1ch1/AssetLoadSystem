@@ -16,7 +16,34 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 03832f4d953efa14789de3c6779e4ed1
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: f11d276603eeebf408ef72519fa4fba8
+    m_Address: Danger
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+    m_MainAsset: {fileID: 1916718409665960750, guid: f11d276603eeebf408ef72519fa4fba8,
+      type: 3}
+    m_TargetAsset: {fileID: 1916718409665960750, guid: f11d276603eeebf408ef72519fa4fba8,
+      type: 3}
+  - m_GUID: 86d4c2f4b46cdd846a5a4face490f1b4
+    m_Address: Enemy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+    m_MainAsset: {fileID: 692233716640042804, guid: 86d4c2f4b46cdd846a5a4face490f1b4,
+      type: 3}
+    m_TargetAsset: {fileID: 692233716640042804, guid: 86d4c2f4b46cdd846a5a4face490f1b4,
+      type: 3}
+  - m_GUID: a4b03a64315f63c4d886271709bded70
+    m_Address: Guard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+    m_MainAsset: {fileID: 800346815523564326, guid: a4b03a64315f63c4d886271709bded70,
+      type: 3}
+    m_TargetAsset: {fileID: 800346815523564326, guid: a4b03a64315f63c4d886271709bded70,
+      type: 3}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5d9bfcb4682a39a4489f8b1c2c3b0e73, type: 2}
   m_SchemaSet:

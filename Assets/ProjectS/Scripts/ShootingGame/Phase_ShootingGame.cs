@@ -22,7 +22,7 @@ namespace ProjectS
     {
         public Action OnEndPhase { get; set; }
         private ViewModel_ShootingGame _viewModel;
-        private Task<IList<GameObject>> loadTask;
+        private Task<IList<GameObject>> _loadTask;
         
         public PhaseLoad(ViewModel_ShootingGame _viewModel)
         {
@@ -31,12 +31,12 @@ namespace ProjectS
         
         public void Init()
         {
-            loadTask = AssetLoader.Instance.Load<GameObject>("ShootingGame");
+            _loadTask = AssetLoader.Instance.Load<GameObject>("ShootingGame");
         }
         
         public void Run(float deltaTime)
         {
-            if (loadTask.IsCompleted)
+            if (_loadTask.IsCompleted)
             {
                 _viewModel.LoadPrefabs();
                 OnEndPhase?.Invoke();
@@ -112,6 +112,8 @@ namespace ProjectS
         {
             this._viewModel = viewModel;
             this._viewModel.EnemyManager.OnNext += NextEnemy;
+            this._viewModel.HitPowerPlayer1.OnChange += InputPlayer1;
+            this._viewModel.HitPowerPlayer2.OnChange += InputPlayer2;
             this._viewModel.OnEnemyAppeared += EnemyAppeared;
             this._viewModel.OnDefeat += EnemyDefeat;
             this._viewModel.OnFinishedEscapeEnemy += EnemyEscaped;
@@ -120,7 +122,8 @@ namespace ProjectS
         public void Init()
         {
             _viewModel.ShowGameUI();
-            _viewModel.UpdateScore(0);
+            _viewModel.UpdateScore1(0);
+            _viewModel.UpdateScore2(0);
             _viewModel.NextEnemy();
             _time = 0;
         }
@@ -139,12 +142,15 @@ namespace ProjectS
                 case Turn.AppearWait:
                     break;
                 case Turn.Appeared:
-                    _cpuAttackTime -= deltaTime;
-                    if (_cpuAttackTime < 0)
+                    if (_viewModel.PlayerNum == 1)
                     {
-                        _viewModel.Attack(1);
-                        if (_currentEnemy.Type == EnemyType.Group) NextGroupEnemy();
-                        else if (_currentEnemy.Type == EnemyType.Guard) NextGuardEnemy();
+                        _cpuAttackTime -= deltaTime;
+                        if (_cpuAttackTime < 0)
+                        {
+                            _viewModel.AttackPlayer1(1);
+                            if (_currentEnemy.Type == EnemyType.Group) NextGroupEnemy();
+                            else if (_currentEnemy.Type == EnemyType.Guard) NextGuardEnemy();
+                        }
                     }
                     _enemyTime -= deltaTime;
                     if (_enemyTime <= 0)
@@ -164,6 +170,8 @@ namespace ProjectS
         private void End()
         {
             _viewModel.EnemyManager.OnNext -= NextEnemy;
+            _viewModel.HitPowerPlayer1.OnChange -= InputPlayer1;
+            _viewModel.HitPowerPlayer2.OnChange -= InputPlayer2;
             _viewModel.OnEnemyAppeared -= EnemyAppeared;
             _viewModel.OnDefeat -= EnemyDefeat;
             _viewModel.OnFinishedEscapeEnemy -= EnemyEscaped;
@@ -182,15 +190,15 @@ namespace ProjectS
             else
             {
                 ICPU_ShootingGame CPU = _viewModel.CPU;
-                var rand = UnityEngine.Random.Range(0, 100);
+                var random = UnityEngine.Random.Range(0, 100);
                 int missRate;
                 if (enemy.Type == EnemyType.Danger) missRate = CPU.MissRateDanger;
                 else missRate = CPU.MissRate;
-                if (rand < missRate) _cpuAttackTime = 999;
+                if (random < missRate) _cpuAttackTime = 999;
                 else
                 {
-                    var randTime = UnityEngine.Random.value;
-                    _cpuAttackTime = CPU.AttackTime + CPU.AttackOffset * randTime;
+                    var randomTime = UnityEngine.Random.value;
+                    _cpuAttackTime = CPU.AttackTime + CPU.AttackOffset * randomTime;
                 }
             }
         }
@@ -198,31 +206,43 @@ namespace ProjectS
         private void NextGroupEnemy()
         {
             ICPU_ShootingGame CPU = _viewModel.CPU;
-            var rand = UnityEngine.Random.value;
-            _cpuAttackTime = CPU.AttackTime + CPU.AttackOffset * rand;
+            var random = UnityEngine.Random.value;
+            _cpuAttackTime = CPU.AttackTime + CPU.AttackOffset * random;
         }
         
         private void NextGuardEnemy()
         {
             ICPU_ShootingGame CPU = _viewModel.CPU;
-            var rand = UnityEngine.Random.Range(0, 100);
-            if (rand < CPU.MissRateGuard) _cpuAttackTime = 999;
+            var random = UnityEngine.Random.Range(0, 100);
+            if (random < CPU.MissRateGuard) _cpuAttackTime = 999;
             else
             {
-                var randTime = UnityEngine.Random.value;
-                _cpuAttackTime = CPU.AttackTime + CPU.AttackOffset * randTime;
+                var randomTime = UnityEngine.Random.value;
+                _cpuAttackTime = CPU.AttackTime + CPU.AttackOffset * randomTime;
                 _cpuAttackTime /= 2.0f;
             }
         }
         
-        private void Input(int hitPower)
+        private void InputPlayer1(int hitPower)
         {
+            if (hitPower <= 0) return;
             if (turn != Turn.Appeared)
             {
-                _viewModel.Miss();
+                _viewModel.MissPlayer1();
                 return;
             }
-            _viewModel.Attack(hitPower);
+            _viewModel.AttackPlayer1(hitPower);
+        }
+        
+        private void InputPlayer2(int hitPower)
+        {
+            if (hitPower <= 0) return;
+            if (turn != Turn.Appeared)
+            {
+                _viewModel.MissPlayer2();
+                return;
+            }
+            _viewModel.AttackPlayer2(hitPower);
         }
         
         private void EnemyAppeared()
