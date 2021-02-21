@@ -1,0 +1,147 @@
+﻿@startuml
+class GameMaster
+{
+    + Inspecterで設定するGameObjectやSpriteなど
+    Phase更新
+    動作があった場合の処理
+    各スクリプトの呼び出し
+}
+
+abstract class Phase_ShootingGame
+{
+    ゲームの状態ごとの共通処理を記述
+    + Action onPhaseFinish;
+    + Init()
+    + onFinishPhase();
+}
+
+class ViewModel
+{
+    + IEnemy currentEnemy
+    + ICPU ICPU
+    + 各種Phaseより受け取ったイベントをGameMasterへ
+}
+
+class EnemyController
+{
+    敵一体の動きを司る
+    - Animator animator
+    + StartEnterAnimation()
+    + StartDamageAnimation()
+    + StartDefeatAnimation()
+    + StartEscapeAnimation()
+}
+
+class GroupEnemyController
+{
+    集団の敵の動きを司る
+    - List<GameObject> children
+    + StartEnterAnimation()
+    + StartDamageAnimation()
+    + StartDefeatAnimation()
+    + StartEscapeAnimation()
+    - Update()
+}
+
+class EnemyManager
+{
+    + Init()
+    + IEnemy Next()
+    - CreateList()
+}
+
+interface IEnemy
+{
+    出現する敵の情報
+    - float Duration
+    - int Point
+    - int Hp
+    - EnemyType Type
+    - EnemyColor Color
+}
+
+class EnemyRed{}
+class EnemyGuard{}
+class EnemyGroup{}
+class EnemyDanger{}
+EnemyRed ..|> IEnemy
+EnemyGuard ..|> IEnemy
+EnemyGroup ..|> IEnemy
+EnemyDanger ..|> IEnemy
+
+class TimeView{
+    タイマーの秒数表示
+    + SetTime(float time)
+}
+
+class ScoreView
+{
+    スコアを表示
+    + SetScore(int Score)
+}
+
+class EnemyOrderListView
+{
+    中央UI部分の敵一覧ビュー(いらないかも)
+    + AddList(IEnemy enemy)
+}
+
+class EnemyOrderListItemView
+{
+    中央UI部分の敵一覧の敵一体分のビュー(いらないかも)
+    + SetEnemy(IEnemy enemy)
+    + Move(IEnemy enemy) UIスクロール機能
+}
+
+interface ICPU
+{
+    入力時間のパラメータ
+}
+class CPUEasy{}
+class CPUNormal{}
+class CPUHard{}
+CPUEasy ..|> ICPU
+CPUNormal ..|> ICPU
+CPUHard ..|> ICPU
+
+class LoadPhase
+{
+    ステージのデータを読み込んで配置
+}
+LoadPhase --|> Phase_ShootingGame
+
+class CountDownPhase
+{
+    ゲームのカウントダウン処理(ほしいけど面倒だから外すかも)
+}
+CountDownPhase --|> Phase_ShootingGame
+class GamePhase
+{
+    プレイ中の処理
+}
+GamePhase --|> Phase_ShootingGame
+class FinishPhase
+{
+    終了の合図の表示処理
+}
+FinishPhase --|> Phase_ShootingGame
+class ResultPhase
+{
+    結果表示の処理
+}
+ResultPhase --|> Phase_ShootingGame
+
+GameMaster -- Phase_ShootingGame
+GameMaster -- ViewModel
+GameMaster -- TimeView
+GameMaster -- ScoreView
+GameMaster -- EnemyOrderListView
+EnemyOrderListItemView o-- EnemyOrderListView
+GameMaster -- EnemyController
+GameMaster -- EnemyManager
+GameMaster -- GroupEnemyController
+ViewModel -- ICPU
+ViewModel -- IEnemy
+Phase_ShootingGame -- ViewModel
+
+@enduml
