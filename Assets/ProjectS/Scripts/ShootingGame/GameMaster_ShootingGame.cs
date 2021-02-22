@@ -20,8 +20,8 @@ namespace ProjectS
         private ScoreView scoreViewCpu;
         
         // いらないかも
-        [SerializeField]
-        private EnemyOrderListView enemyOrderListView;
+        // [SerializeField]
+        // private EnemyOrderListView enemyOrderListView;
         
         [SerializeField]
         private GameObject enemyOrder;
@@ -120,7 +120,7 @@ namespace ProjectS
         protected void OnDestroy()
         {
             base.OnDestroy();
-            AssetLoader.Instance.Unload("ScoreAttack");
+            AssetLoader.Instance.Unload("Game");
         }
         
         private void StartLoadPhase()
@@ -315,7 +315,7 @@ namespace ProjectS
         
         private void Result(bool display)
         {
-            var prefab = ResourceStore.Instance.Get<GameObject>("GameResultAnimation");
+            var prefab = ResourceStore.Instance.Get<GameObject>("GameResult");
             var obj = Instantiate(prefab, overlayCanvas.transform);
             var animator = obj.GetComponent<Animator>();
             
@@ -389,13 +389,13 @@ namespace ProjectS
         {
             enemyPrefab = ResourceStore.Instance.Get<GameObject>("Enemy");
             _hitEffect = ResourceStore.Instance.Get<GameObject>("PlayerAttackEffect");
-            _missEffect = ResourceStore.Instance.Get<GameObject>("PlayerMissEffect");
+            _missEffect = ResourceStore.Instance.Get<GameObject>("PlayerAttackEffectMiss");
             var generator = ResourceStore.Instance.Get<GameObject>("ScoreGenerator");
-            _scoreGenerator = Instantiate(_scoreGenerator).GetComponent<ScoreGenerator>();
+            _scoreGenerator = Instantiate(generator).GetComponent<ScoreGenerator>();
             _scoreGenerator.SetTargetCanvas(overlayCanvas);
             
-            Instantiate(ResourceStore.Instance.Get<GameObject>("BackGround"), rightContainer.transform);
-            Instantiate(ResourceStore.Instance.Get<GameObject>("BackGround"), leftContainer.transform);
+            Instantiate(ResourceStore.Instance.Get<GameObject>("Stage"), rightContainer.transform);
+            Instantiate(ResourceStore.Instance.Get<GameObject>("Stage"), leftContainer.transform);
         }
         
         private void ShowFinish(bool state)

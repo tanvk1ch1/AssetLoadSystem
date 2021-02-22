@@ -31,7 +31,7 @@ namespace ProjectS
         
         public void Init()
         {
-            _loadTask = AssetLoader.Instance.Load<GameObject>("ShootingGame");
+            _loadTask = AssetLoader.Instance.Load<GameObject>("Game");
         }
         
         public void Run(float deltaTime)
