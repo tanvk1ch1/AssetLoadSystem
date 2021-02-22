@@ -10,22 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Game
+  m_Name: Effect
   m_EditorClassIdentifier: 
-  m_GroupName: Game
+  m_GroupName: Effect
   m_Data:
     m_SerializedData: []
-  m_GUID: 12311e425e90a8343b9c27949fdef146
-  m_SerializeEntries:
-  - m_GUID: a329cbe303f407342b36340d1a04ffe2
-    m_Address: GameFinish
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Game
-    m_MainAsset: {fileID: 4146413482339990277, guid: a329cbe303f407342b36340d1a04ffe2,
-      type: 3}
-    m_TargetAsset: {fileID: 4146413482339990277, guid: a329cbe303f407342b36340d1a04ffe2,
-      type: 3}
+  m_GUID: e3d94181707055643b8d36e22ebd0235
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5d9bfcb4682a39a4489f8b1c2c3b0e73, type: 2}
   m_SchemaSet:
