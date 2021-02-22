@@ -16,8 +16,28 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: e3d94181707055643b8d36e22ebd0235
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: a7c0120fe554d5c4f813533ec16b3d3e
+    m_Address: PlayerAttackEffect
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+    m_MainAsset: {fileID: 1112086586746238570, guid: a7c0120fe554d5c4f813533ec16b3d3e,
+      type: 3}
+    m_TargetAsset: {fileID: 1112086586746238570, guid: a7c0120fe554d5c4f813533ec16b3d3e,
+      type: 3}
+  - m_GUID: bfbbcfb2a3d76f941a170b3d9c6f5f92
+    m_Address: PlayerAttackEffectMiss
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+    m_MainAsset: {fileID: 1358530536980134268, guid: bfbbcfb2a3d76f941a170b3d9c6f5f92,
+      type: 3}
+    m_TargetAsset: {fileID: 1358530536980134268, guid: bfbbcfb2a3d76f941a170b3d9c6f5f92,
+      type: 3}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5d9bfcb4682a39a4489f8b1c2c3b0e73, type: 2}
   m_SchemaSet:
-    m_Schemas: []
+    m_Schemas:
+    - {fileID: 11400000, guid: 4c73933293798454a9b00a52347b2293, type: 2}
+    - {fileID: 11400000, guid: 77b4f06c42daa3840bf0e61c5c379a2b, type: 2}
