@@ -26,6 +26,15 @@ MonoBehaviour:
       type: 3}
     m_TargetAsset: {fileID: 4146413482339990277, guid: a329cbe303f407342b36340d1a04ffe2,
       type: 3}
+  - m_GUID: b60c9ea7bfddc3d43a831e65caa14cad
+    m_Address: GameResult
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Game
+    m_MainAsset: {fileID: 4042838629196917580, guid: b60c9ea7bfddc3d43a831e65caa14cad,
+      type: 3}
+    m_TargetAsset: {fileID: 4042838629196917580, guid: b60c9ea7bfddc3d43a831e65caa14cad,
+      type: 3}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5d9bfcb4682a39a4489f8b1c2c3b0e73, type: 2}
   m_SchemaSet:
