@@ -195,9 +195,6 @@ namespace ProjectS
                     case EnemyType.Normal:
                         switch (enemy.Color)
                         {
-                            case EnemyColor.Red:
-                                prefab = enemyPrefab;
-                                break;
                             case EnemyColor.None:
                                 prefab = enemyPrefab;
                                 break;

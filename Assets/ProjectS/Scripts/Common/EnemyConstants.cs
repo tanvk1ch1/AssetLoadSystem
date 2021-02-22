@@ -6,8 +6,8 @@
         
         public enum Type
         {
-            Red = 0,
-            Gray,
+            // TODO:バリエーションを増やしたいが、モデルの準備ができてからにする
+            Normal = 0,
         }
         
         public enum State
@@ -16,7 +16,6 @@
             Wait,
             Move,
             Attack,
-            Invincible,
             Shield,
             WaitAttack,
             Damage,

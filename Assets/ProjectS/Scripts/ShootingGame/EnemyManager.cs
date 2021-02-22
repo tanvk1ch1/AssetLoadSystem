@@ -16,7 +16,7 @@ namespace ProjectS
     
     public enum EnemyColor
     {
-        Red,
+        // TODO:マテリアル色を変えたいが、準備できてからにする
         None
     }
     
@@ -33,13 +33,13 @@ namespace ProjectS
         EnemyColor Color { get; }
     }
     
-    public class EnemyRed : IEnemy
+    public class EnemyNormal : IEnemy
     {
         public float Duration => 3;
         public int Point => 100;
         public int Hp => 1;
         public EnemyType Type => EnemyType.Normal;
-        public EnemyColor Color => EnemyColor.Red;
+        public EnemyColor Color => EnemyColor.None;
     }
 
     public class EnemyGuard : IEnemy
@@ -162,11 +162,11 @@ namespace ProjectS
             switch (_random.Next(0,1))
             {
                 case 0:
-                    return new EnemyRed();
+                    return new EnemyNormal();
                 default:
                     break;
             }
-            return new EnemyRed();
+            return new EnemyNormal();
         }
         
         private EnemyType[] CreateEnemyList(int[] ratio)

@@ -60,11 +60,11 @@ interface IEnemy
     - EnemyColor Color
 }
 
-class EnemyRed{}
+class EnemyNormal{}
 class EnemyGuard{}
 class EnemyGroup{}
 class EnemyDanger{}
-EnemyRed ..|> IEnemy
+EnemyNormal ..|> IEnemy
 EnemyGuard ..|> IEnemy
 EnemyGroup ..|> IEnemy
 EnemyDanger ..|> IEnemy
