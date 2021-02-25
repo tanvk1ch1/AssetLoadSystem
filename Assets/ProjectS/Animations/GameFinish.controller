@@ -10,8 +10,8 @@ AnimatorStateMachine:
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: -4036514687854659418}
-    m_Position: {x: 200, y: 0, z: 0}
+    m_State: {fileID: -6992446816248093182}
+    m_Position: {x: 440, y: 60, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -21,15 +21,15 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: -4036514687854659418}
---- !u!1102 &-4036514687854659418
+  m_DefaultState: {fileID: -6992446816248093182}
+--- !u!1102 &-6992446816248093182
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FinishText
+  m_Name: GameFinish
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -42,7 +42,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 9026d93f5e3ab6c49b15db1991c550e2, type: 2}
+  m_Motion: {fileID: 7400000, guid: 05fb3726f9000764a9deceb536e68d01, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
