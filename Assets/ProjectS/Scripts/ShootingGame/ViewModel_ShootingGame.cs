@@ -7,7 +7,7 @@ namespace ProjectS
     {
         #region Member
         
-        public const float TIME = 90;
+        public const float TIME = 60;
         public ValueObserver<bool> TitleDisplayState { get; } = new ValueObserver<bool>(true);
         public ValueObserver<int> Score1 { get; } = new ValueObserver<int>(0);
         public ValueObserver<int> Score2 { get; } = new ValueObserver<int>(0);

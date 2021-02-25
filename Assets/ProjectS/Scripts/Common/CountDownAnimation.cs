@@ -16,5 +16,12 @@ namespace ProjectS
         {
             _onEndCallBack = callback;
         }
+        
+        // アニメーションのイベントで呼び出し
+        public void OnEndCountdownAnimation()
+        {
+            _onEndCallBack?.Invoke();
+            gameObject.SetActive(false);
+        }
     }
 }

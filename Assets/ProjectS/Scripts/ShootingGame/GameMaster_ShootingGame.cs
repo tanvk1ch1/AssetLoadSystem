@@ -68,7 +68,7 @@ namespace ProjectS
                 _viewModel.Score2.OnChange += scoreViewPlayer2.SetScore;
             }
             
-            _viewModel.EnemyOrderListDisplayState.OnChange += enemyOrder.SetActive;
+            // _viewModel.EnemyOrderListDisplayState.OnChange += enemyOrder.SetActive;
             // _viewModel.EnemyManager.OnAddList += enemyOrderListView.AddList;
             _viewModel.EnemyManager.OnNext += AppearEnemy;
             // _viewModel.EnemyManager.OnNext += enemyOrderListView.Move;
@@ -122,7 +122,7 @@ namespace ProjectS
         
         private void StartLoadPhase()
         {
-            InputObserver.Instance.GetHit();
+            // InputObserver.Instance.GetHit();
             
             _currentPhase = new PhaseLoad(_viewModel);
             _currentPhase.OnEndPhase = StartCountDownPhase;
@@ -137,10 +137,8 @@ namespace ProjectS
             _currentPhase = new PhaseCountDown(_viewModel);
             
             _currentPhase.OnEndPhase = StartGamePhase;
-            Debug.Log(_currentPhase.OnEndPhase);
             _currentPhase.Init();
             LoadPrefabs();
-            Debug.Log("現在のフェーズ1："+_currentPhase);
         }
         
         private void StartGamePhase()
@@ -149,7 +147,6 @@ namespace ProjectS
             // 音を鳴らしたい
             
             _currentPhase = new PhaseGame(_viewModel);
-            Debug.Log("現在のフェーズ2："+_currentPhase);
             _currentPhase.OnEndPhase = StartFinishPhase;
             _currentPhase.Init();
         }
