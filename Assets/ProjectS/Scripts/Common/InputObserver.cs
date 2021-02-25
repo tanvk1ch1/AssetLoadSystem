@@ -6,6 +6,10 @@ public class InputObserver : MonoBehaviour
     public static InputObserver Instance { get; } = new InputObserver();
     public event Action OnAttackLeft;
     public event Action OnAttackRight;
+    public event Action<int> OnHitCap;
+    private int _hitValue;
+    private int _hit;
+    
     public int HitDown
     {
         get
@@ -14,7 +18,7 @@ public class InputObserver : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    return 1;
+                    OnHitCap?.Invoke(_hit);
                 }
                 return 0;
             }
@@ -25,6 +29,19 @@ public class InputObserver : MonoBehaviour
     public int GetHit()
     {
         return HitDown;
+    }
+
+    public bool CheckKeyDownDecide()
+    {
+        bool flag = Input.GetKeyDown(KeyCode.A);
+        return flag;
+    }
+    
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A)) _hit = 1;
+        _hitValue = _hit;
+        OnHitCap?.Invoke(_hit);
     }
     
     public void ClearEvents()

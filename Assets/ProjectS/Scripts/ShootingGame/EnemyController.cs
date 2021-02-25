@@ -9,13 +9,10 @@ namespace ProjectS
         #region Member
         
         public Action OnFinishedEnter;
-        public Action OnFinishedDamage;
-        public Action OnFinishedDefeat;
         public Action OnFinishedEscape;
 
         [SerializeField]
         private Animator animator;
-        public bool IsDefeat { get; } = false;
         
         #endregion
         

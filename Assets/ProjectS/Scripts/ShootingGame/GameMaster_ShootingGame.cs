@@ -51,10 +51,7 @@ namespace ProjectS
             _viewModel = new ViewModel_ShootingGame(GameDataStore.Instance.PlayerNum ,GameDataStore.Instance.GameLevel);
             _viewModel.TimeDisplayState.OnChange += timeView.gameObject.SetActive;
             _viewModel.TimeValue.OnChange += timeView.SetTime;
-            // _viewModel.CountDownDisplayState.OnChange += display =>
-            // {
-            //     if (display) ShowCountDown();
-            // };
+            _viewModel.CountDownDisplayState.OnChange += display => { if (display) ShowCountDown(); };
             _viewModel.Score1ViewDisplayState.OnChange += scoreViewPlayer1.gameObject.SetActive;
             _viewModel.Score1.OnChange += scoreViewPlayer1.SetScore;
             
@@ -125,6 +122,8 @@ namespace ProjectS
         
         private void StartLoadPhase()
         {
+            InputObserver.Instance.GetHit();
+            
             _currentPhase = new PhaseLoad(_viewModel);
             _currentPhase.OnEndPhase = StartCountDownPhase;
             _currentPhase.Init();
@@ -132,21 +131,25 @@ namespace ProjectS
         
         private void StartCountDownPhase()
         {
-            NeedRestartCountDown = false;
+            // NeedRestartCountDown = false;
             
             playerSelect.SetActive(false);
             _currentPhase = new PhaseCountDown(_viewModel);
+            
             _currentPhase.OnEndPhase = StartGamePhase;
+            Debug.Log(_currentPhase.OnEndPhase);
             _currentPhase.Init();
             LoadPrefabs();
+            Debug.Log("現在のフェーズ1："+_currentPhase);
         }
         
         private void StartGamePhase()
         {
-            NeedRestartCountDown = true;
+            // NeedRestartCountDown = true;
             // 音を鳴らしたい
             
             _currentPhase = new PhaseGame(_viewModel);
+            Debug.Log("現在のフェーズ2："+_currentPhase);
             _currentPhase.OnEndPhase = StartFinishPhase;
             _currentPhase.Init();
         }
@@ -177,6 +180,7 @@ namespace ProjectS
             var cd = obj.GetComponent<CountDownAnimation>();
             cd.SetVisible(true);
             cd.SetOnEndCallBack(StartGamePhase);
+            Debug.Log("カウントダウン開始");
         }
         
         private void AppearEnemy(IEnemy enemy)
@@ -360,15 +364,15 @@ namespace ProjectS
             Instantiate(_missEffect, leftContainer.transform);
         }
         
-        private void ShowMissHitEffectRight()
-        {
-            Instantiate(_missEffect, rightContainer.transform);
-        }
-        
-        private void ShowMissHitEffectLeft()
-        {
-            Instantiate(_missEffect, leftContainer.transform);
-        }
+        // private void ShowMissHitEffectRight()
+        // {
+        //     Instantiate(_missEffect, rightContainer.transform);
+        // }
+        //
+        // private void ShowMissHitEffectLeft()
+        // {
+        //     Instantiate(_missEffect, leftContainer.transform);
+        // }
 
         private void DestroyEnemies()
         {

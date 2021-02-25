@@ -67,7 +67,7 @@ namespace ProjectS
         
         public async Task<IList<UnityEngine.Object>> LoadSystem()
         {
-            return await Load<UnityEngine.Object>("System");
+            return await Load<UnityEngine.Object>("Game");
         }
         
         #endregion

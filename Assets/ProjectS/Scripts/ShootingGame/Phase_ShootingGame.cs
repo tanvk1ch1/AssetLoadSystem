@@ -78,6 +78,12 @@ namespace ProjectS
         public void Run(float deltaTime)
         {
             if (readyObj == null || !readyObj.activeSelf) return;
+
+            if (InputObserver.Instance.CheckKeyDownDecide())
+            {
+                readyObj.SetActive(false);
+                _viewModel.ShowCountDown();
+            }
         }
     }
     
@@ -110,6 +116,7 @@ namespace ProjectS
 
         public PhaseGame(ViewModel_ShootingGame viewModel)
         {
+            Debug.Log("呼ばれてるかチェック1");
             this._viewModel = viewModel;
             this._viewModel.EnemyManager.OnNext += NextEnemy;
             this._viewModel.HitPowerPlayer1.OnChange += InputPlayer1;
@@ -121,6 +128,7 @@ namespace ProjectS
         
         public void Init()
         {
+            Debug.Log("呼ばれてるかチェック2_Init");
             _viewModel.ShowGameUI();
             _viewModel.UpdateScore1(0);
             _viewModel.UpdateScore2(0);
@@ -130,6 +138,7 @@ namespace ProjectS
         
         public void Run(float deltaTime)
         {
+            Debug.Log("呼ばれてるかチェック3_Run");
             _time += deltaTime;
             _viewModel.UpdateTime(TIME - _time);
 
