@@ -19,30 +19,34 @@ namespace ProjectS
         public ValueObserver<bool> ResultDisplayState { get; } = new ValueObserver<bool>(true);
         public ValueObserver<bool> EnemyOrderListDisplayState { get; } = new ValueObserver<bool>(true);
         public ValueObserver<bool> FinishDisplayState { get; } = new ValueObserver<bool>(true);
-        public ValueObserver<int> HitPowerPlayer1 { get; } = new ValueObserver<int>(0);
-        public ValueObserver<int> HitPowerPlayer2 { get; } = new ValueObserver<int>(0);
+        public ValueObserver<int> HitPowerRight { get; } = new ValueObserver<int>(0);
+        public ValueObserver<int> HitPowerLeft { get; } = new ValueObserver<int>(0);
         public EnemyManager EnemyManager { get; } = new EnemyManager();
         public IEnemy currentEnemy { get; private set; }
         public int PlayerNum { get; private set; }
         public ICPU_ShootingGame CPU { get; }
         
-        public Action OnDefeatPlayer1;
-        public Action OnDefeatPlayer2;
-        public Action OnEscapePlayer1;
-        public Action OnEscapePlayer2;
+        public Action OnDefeatLeft;
+        public Action OnDefeatRight;
+        public Action OnEscapeLeft;
+        public Action OnEscapeRight;
         public Action OnDefeat;
         public Action OnEscapeEnemy;
         public Action OnEnemyAppeared;
         public Action OnFinishedEscapeEnemy;
         
-        public Action OnHitPlayer1;
-        public Action OnHitPlayer2;
-        public Action OnMissPlayer1;
-        public Action OnMissPlayer2;
+        public Action OnHitLeft;
+        public Action OnHitRight;
+        public Action OnHitGreatLeft;
+        public Action OnHitGreatRight;
+        public Action OnMissLeft;
+        public Action OnMissRight;
+        public Action OnMissHitLeft;
+        public Action OnMissHitRight;
         public Action OnLoadPrefabs;
         
-        private int _enemyHpPlayer1Side;
-        private int _enemyHpPlayer2Side;
+        private int _enemyHpLeftSide;
+        private int _enemyHpRightSide;
         
         #endregion
         
@@ -106,8 +110,20 @@ namespace ProjectS
         public void NextEnemy()
         {
             currentEnemy = EnemyManager.Next();
-            _enemyHpPlayer1Side = currentEnemy.Hp;
-            _enemyHpPlayer2Side = currentEnemy.Hp;
+            _enemyHpLeftSide = currentEnemy.Hp;
+            _enemyHpRightSide = currentEnemy.Hp;
+        }
+        
+        public void UpdateIsHitRight(bool isAttack)
+        {
+            if (isAttack) HitPowerRight.Value = 1;
+            else HitPowerRight.Value = 0;
+        }
+        
+        public void UpdateIsHitLeft(bool isAttack)
+        {
+            if (isAttack) HitPowerLeft.Value = 1;
+            else HitPowerLeft.Value = 0;
         }
         
         public void AppearedEnemy()
@@ -125,68 +141,69 @@ namespace ProjectS
             OnFinishedEscapeEnemy?.Invoke();
         }
         
-        public void AttackPlayer1(int damage)
+        public void AttackLeft(int damage)
         {
             if (currentEnemy.Type == EnemyType.Danger)
             {
                 UpdateScore(Score1);
                 OnDefeat?.Invoke();
-                OnDefeatPlayer1?.Invoke();
-                OnEscapePlayer1?.Invoke();
+                OnDefeatLeft?.Invoke();
+                OnEscapeLeft?.Invoke();
                 return;
             }
-            if (damage > 0) OnHitPlayer1?.Invoke();
+            if (damage > 0) OnHitLeft?.Invoke();
             if (currentEnemy.Type == EnemyType.Group)
             {
                 UpdateScore(Score1);
-                OnDefeatPlayer1?.Invoke();
+                OnDefeatLeft?.Invoke();
                 return;
             }
-            _enemyHpPlayer1Side -= damage;
-            if (_enemyHpPlayer1Side <= 0)
+            _enemyHpLeftSide -= damage;
+            if (_enemyHpLeftSide <= 0)
             {
                 UpdateScore(Score1);
-                OnDefeatPlayer1?.Invoke();
-                OnEscapePlayer1?.Invoke();
-                OnEscapePlayer2?.Invoke();
+                OnDefeat?.Invoke();
+                OnDefeatLeft?.Invoke();
+                OnEscapeRight?.Invoke();
             }
         }
         
-        public void AttackPlayer2(int damage)
+        public void AttackRight(int damage)
         {
             if (currentEnemy.Type == EnemyType.Danger)
             {
+                OnMissHitRight?.Invoke();
                 UpdateScore(Score2);
                 OnDefeat?.Invoke();
-                OnDefeatPlayer2?.Invoke();
-                OnEscapePlayer2?.Invoke();
+                OnDefeatRight?.Invoke();
+                OnEscapeLeft?.Invoke();
                 return;
             }
-            if (damage > 0) OnHitPlayer2?.Invoke();
+            if (damage > 0) OnHitRight?.Invoke();
             if (currentEnemy.Type == EnemyType.Group)
             {
                 UpdateScore(Score2);
-                OnDefeatPlayer2?.Invoke();
+                OnDefeatRight?.Invoke();
                 return;
             }
-            _enemyHpPlayer2Side -= damage;
-            if (_enemyHpPlayer2Side <= 0)
+            _enemyHpRightSide -= damage;
+            if (_enemyHpRightSide <= 0)
             {
                 UpdateScore(Score2);
                 OnDefeat?.Invoke();
-                OnDefeatPlayer2?.Invoke();
-                OnEscapePlayer2?.Invoke();
+                OnDefeatRight?.Invoke();
+                OnEscapeLeft?.Invoke();
             }
         }
         
-        public void MissPlayer1()
+        public void MissLeft()
         {
-            OnMissPlayer1?.Invoke();
+            OnMissLeft?.Invoke();
         }
         
-        public void MissPlayer2()
+        public void MissRight()
         {
-            OnMissPlayer2?.Invoke();
+            OnMissRight?.Invoke();
         }
         
         private void UpdateScore(ValueObserver<int> score)

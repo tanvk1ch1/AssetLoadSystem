@@ -81,6 +81,7 @@ namespace ProjectS
 
             if (InputObserver.Instance.CheckKeyDownDecide())
             {
+                Debug.Log("Aキーが押された：ゲーム開始");
                 readyObj.SetActive(false);
                 _viewModel.ShowCountDown();
             }
@@ -118,8 +119,8 @@ namespace ProjectS
         {
             this._viewModel = viewModel;
             this._viewModel.EnemyManager.OnNext += NextEnemy;
-            this._viewModel.HitPowerPlayer1.OnChange += InputPlayer1;
-            this._viewModel.HitPowerPlayer2.OnChange += InputPlayer2;
+            this._viewModel.HitPowerLeft.OnChange += InputLeft;
+            this._viewModel.HitPowerRight.OnChange += InputRight;
             this._viewModel.OnEnemyAppeared += EnemyAppeared;
             this._viewModel.OnDefeat += EnemyDefeat;
             this._viewModel.OnFinishedEscapeEnemy += EnemyEscaped;
@@ -138,7 +139,11 @@ namespace ProjectS
         {
             _time += deltaTime;
             _viewModel.UpdateTime(TIME - _time);
-
+            
+            // _viewModel.UpdateIsAttackRight(InputObserver.Instance.IsHitRight);
+            // _viewModel.UpdateIsAttackLeft(InputObserver.Instance.IsHitLeft);
+            if (InputObserver.Instance.HitDown == 1) _viewModel.UpdateIsHitLeft(true);
+            
             switch (turn)
             {
                 case Turn.Interval:
@@ -153,7 +158,7 @@ namespace ProjectS
                         _cpuAttackTime -= deltaTime;
                         if (_cpuAttackTime < 0)
                         {
-                            _viewModel.AttackPlayer1(1);
+                            _viewModel.AttackRight(1);
                             if (_currentEnemy.Type == EnemyType.Group) NextGroupEnemy();
                             else if (_currentEnemy.Type == EnemyType.Guard) NextGuardEnemy();
                         }
@@ -176,8 +181,8 @@ namespace ProjectS
         private void End()
         {
             _viewModel.EnemyManager.OnNext -= NextEnemy;
-            _viewModel.HitPowerPlayer1.OnChange -= InputPlayer1;
-            _viewModel.HitPowerPlayer2.OnChange -= InputPlayer2;
+            _viewModel.HitPowerLeft.OnChange -= InputLeft;
+            _viewModel.HitPowerRight.OnChange -= InputRight;
             _viewModel.OnEnemyAppeared -= EnemyAppeared;
             _viewModel.OnDefeat -= EnemyDefeat;
             _viewModel.OnFinishedEscapeEnemy -= EnemyEscaped;
@@ -229,26 +234,27 @@ namespace ProjectS
             }
         }
         
-        private void InputPlayer1(int hitPower)
+        private void InputLeft(int hitPower)
         {
             if (hitPower <= 0) return;
+            if (_viewModel.PlayerNum == 1) return;
             if (turn != Turn.Appeared)
             {
-                _viewModel.MissPlayer1();
+                _viewModel.MissLeft();
                 return;
             }
-            _viewModel.AttackPlayer1(hitPower);
+            _viewModel.AttackLeft(hitPower);
         }
         
-        private void InputPlayer2(int hitPower)
+        private void InputRight(int hitPower)
         {
             if (hitPower <= 0) return;
             if (turn != Turn.Appeared)
             {
-                _viewModel.MissPlayer2();
+                _viewModel.MissRight();
                 return;
             }
-            _viewModel.AttackPlayer2(hitPower);
+            _viewModel.AttackRight(hitPower);
         }
         
         private void EnemyAppeared()

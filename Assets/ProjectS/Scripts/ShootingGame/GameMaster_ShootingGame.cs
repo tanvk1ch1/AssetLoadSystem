@@ -75,17 +75,17 @@ namespace ProjectS
             _viewModel.EnemyManager.Init();
             
             _viewModel.OnEscapeEnemy += EscapeAllEnemy;
-            _viewModel.OnDefeatPlayer1 += DefeatRight;
-            _viewModel.OnDefeatPlayer2 += DefeatLeft;
-            _viewModel.OnEscapePlayer1 += EscapeRight;
-            _viewModel.OnEscapePlayer2 += EscapeLeft;
+            _viewModel.OnDefeatLeft += DefeatLeft;
+            _viewModel.OnDefeatRight += DefeatRight;
+            _viewModel.OnEscapeLeft += EscapeLeft;
+            _viewModel.OnEscapeRight += EscapeRight;
             
             _viewModel.ResultDisplayState.OnChange += Result;
             
-            _viewModel.OnHitPlayer1 += ShowHitEffectRight;
-            _viewModel.OnHitPlayer2 += ShowHitEffectLeft;
-            _viewModel.OnMissPlayer1 += ShowMissEffectLeft;
-            _viewModel.OnMissPlayer2 += ShowMissEffectRight;
+            _viewModel.OnHitLeft += ShowHitEffectRight;
+            _viewModel.OnHitRight += ShowHitEffectLeft;
+            _viewModel.OnMissLeft += ShowMissEffectLeft;
+            _viewModel.OnMissRight += ShowMissEffectRight;
             
             _viewModel.OnLoadPrefabs += LoadPrefabs;
             _viewModel.SetPlayerNum(GameDataStore.Instance.PlayerNum);
@@ -122,8 +122,6 @@ namespace ProjectS
         
         private void StartLoadPhase()
         {
-            // InputObserver.Instance.GetHit();
-            
             _currentPhase = new PhaseLoad(_viewModel);
             _currentPhase.OnEndPhase = StartCountDownPhase;
             _currentPhase.Init();
@@ -145,7 +143,7 @@ namespace ProjectS
         {
             // NeedRestartCountDown = true;
             // 音を鳴らしたい
-            
+            // InputObserver.Instance.GetHit();
             _currentPhase = new PhaseGame(_viewModel);
             _currentPhase.OnEndPhase = StartFinishPhase;
             _currentPhase.Init();
