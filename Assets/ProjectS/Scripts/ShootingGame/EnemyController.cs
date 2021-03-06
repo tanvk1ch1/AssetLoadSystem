@@ -10,6 +10,7 @@ namespace ProjectS
         
         public Action OnFinishedEnter;
         public Action OnFinishedEscape;
+        public Action OnFinishedDefeat;
 
         [SerializeField]
         private Animator animator;
@@ -80,6 +81,25 @@ namespace ProjectS
                 "onCompleteTarget", gameObject,
                 "easeType", "linear"
             ));
+        }
+        
+        private void AppearAnimationEnd()
+        {
+            iTween.Stop(this.gameObject);
+            // animator.SetBool("wait", true);
+            OnFinishedEnter?.Invoke();
+        }
+        
+        private void EscapeAnimationEnd()
+        {
+            iTween.Stop(this.gameObject);
+            OnFinishedEscape?.Invoke();
+        }
+        
+        private void DefeatAnimationEnd()
+        {
+            iTween.Stop(this.gameObject);
+            OnFinishedDefeat?.Invoke();
         }
         
         #endregion

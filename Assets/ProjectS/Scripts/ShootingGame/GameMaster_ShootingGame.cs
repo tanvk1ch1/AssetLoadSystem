@@ -82,8 +82,8 @@ namespace ProjectS
             
             _viewModel.ResultDisplayState.OnChange += Result;
             
-            _viewModel.OnHitLeft += ShowHitEffectRight;
-            _viewModel.OnHitRight += ShowHitEffectLeft;
+            _viewModel.OnHitLeft += ShowHitEffectLeft;
+            _viewModel.OnHitRight += ShowHitEffectRight;
             _viewModel.OnMissLeft += ShowMissEffectLeft;
             _viewModel.OnMissRight += ShowMissEffectRight;
             
@@ -345,6 +345,7 @@ namespace ProjectS
         {
             // 効果音を鳴らしたい
             Instantiate(_hitEffect, leftContainer.transform);
+            Debug.Log("キー入力：A");
         }
         
         private void ShowMissEffectRight()

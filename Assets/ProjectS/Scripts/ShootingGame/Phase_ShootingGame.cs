@@ -237,13 +237,16 @@ namespace ProjectS
         private void InputLeft(int hitPower)
         {
             if (hitPower <= 0) return;
-            if (_viewModel.PlayerNum == 1) return;
+            // if (_viewModel.PlayerNum == 1) return;
             if (turn != Turn.Appeared)
             {
+                Debug.Log("ターン：" + turn);
                 _viewModel.MissLeft();
+                Debug.Log("ミス");
                 return;
             }
             _viewModel.AttackLeft(hitPower);
+            Debug.Log("攻撃");
         }
         
         private void InputRight(int hitPower)

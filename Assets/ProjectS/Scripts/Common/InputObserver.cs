@@ -21,6 +21,10 @@ public class InputObserver : MonoBehaviour
                     Debug.Log("Aキーを押した：1");
                     return 1;
                 }
+                else
+                {
+                    return 0;
+                }
             }
             return 0;
         }
