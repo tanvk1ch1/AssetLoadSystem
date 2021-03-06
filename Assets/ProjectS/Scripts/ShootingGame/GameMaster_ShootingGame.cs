@@ -332,7 +332,7 @@ namespace ProjectS
                 animator.Play("Draw");
             }
             
-            obj.GetComponent<AnimationEvent>().OnEnd = g => NextScene();
+            // obj.GetComponent<AnimationEvent>().OnEnd = g => NextScene();
         }
         
         private void ShowHitEffectRight()
@@ -345,7 +345,6 @@ namespace ProjectS
         {
             // 効果音を鳴らしたい
             Instantiate(_hitEffect, leftContainer.transform);
-            Debug.Log("キー入力：A");
         }
         
         private void ShowMissEffectRight()
@@ -425,9 +424,9 @@ namespace ProjectS
         private void OnFinishFadeOut()
         {
             // 今はこの辺は適当な名前でしかない
-            GameDataStore.Instance.NextSceneName = "HogeScene";
-            GameDataStore.Instance.AssetBundleLabel = "Hoge";
-            SceneManager.LoadScene("LoadScene");
+            // GameDataStore.Instance.NextSceneName = "ShootingGameScene";
+            // GameDataStore.Instance.AssetBundleLabel = "Game";
+            // SceneManager.LoadScene("ShootingGameScene");
         }
         
         #endregion
