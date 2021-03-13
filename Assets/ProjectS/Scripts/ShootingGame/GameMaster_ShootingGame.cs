@@ -91,16 +91,18 @@ namespace ProjectS
             _viewModel.SetPlayerNum(GameDataStore.Instance.PlayerNum);
             _viewModel.FinishDisplayState.OnChange += ShowFinish;
             
-            try
-            {
-                var obj = ResourceStore.Instance.Get<GameObject>("StartCount");
-                StartCountDownPhase();
-            }
-            catch (KeyNotFoundException e)
-            {
-                Debug.Log(e);
-                StartLoadPhase();
-            }
+            // try
+            // {
+            //     // Debug.Log("try:get");
+            //     // var obj = ResourceStore.Instance.Get<GameObject>("StartCount");
+            //     // StartCountDownPhase();
+            // }
+            // catch (KeyNotFoundException e)
+            // {
+            //     Debug.Log(e);
+            //     StartLoadPhase();
+            // }
+            StartLoadPhase();
             // 鳴ってたらこの辺りで音を止めたい
         }
         
@@ -309,7 +311,7 @@ namespace ProjectS
                 _rightEnemy.StartEscapeAnimation();
                 // 音を鳴らしたい
             }
-            _scoreGenerator.Instantiate(_viewModel.currentEnemy.Point, new Vector3(-700, 0, 0), Destroy);
+            _scoreGenerator.Instantiate(_viewModel.currentEnemy.Point, new Vector3(300, 0, 0), Destroy);
         }
         
         private void Result(bool display)

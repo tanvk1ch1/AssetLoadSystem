@@ -65,7 +65,7 @@ public class InputObserver : MonoBehaviour
     public bool CheckKeyDownDecide()
     {
         bool flag = Input.GetKeyDown(KeyCode.A);
-        Debug.Log("Aキーを押すまでConsoleに流れ続ける：3");
+        // Debug.Log("Aキーを押すまでConsoleに流れ続ける：3");
         return flag;
     }
     
