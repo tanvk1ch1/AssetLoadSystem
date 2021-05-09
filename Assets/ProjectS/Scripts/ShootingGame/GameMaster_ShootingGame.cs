@@ -288,7 +288,11 @@ namespace ProjectS
         {
             if (_viewModel.currentEnemy.Type != EnemyType.Danger)
             {
-                _leftEnemy.StartDefeatAnimation();
+                // 仮処理
+                // _leftEnemy.StartDefeatAnimation();
+                
+                _leftEnemy.Cut();
+                
                 // 音を鳴らしたい
             }
             else
@@ -303,7 +307,9 @@ namespace ProjectS
         {
             if (_viewModel.currentEnemy.Type != EnemyType.Danger)
             {
-                _rightEnemy.StartDefeatAnimation();
+                // _rightEnemy.StartDefeatAnimation();
+                
+                _rightEnemy.Cut();
                 // 音を鳴らしたい
             }
             else

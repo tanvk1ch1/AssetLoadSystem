@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace ProjectS
 {
@@ -11,6 +12,10 @@ namespace ProjectS
         public Action OnFinishedEnter;
         public Action OnFinishedEscape;
         public Action OnFinishedDefeat;
+        
+        public Vector3 anchorPoint; // カットする場所
+        public Vector3 normalDirection; // カットする向き
+        public Material capMaterial;
 
         [SerializeField]
         private Animator animator;
@@ -81,6 +86,25 @@ namespace ProjectS
                 "onCompleteTarget", gameObject,
                 "easeType", "linear"
             ));
+        }
+
+        public virtual void Cut()
+        {
+            anchorPoint = transform.position + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f));
+            normalDirection = new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f));
+
+            capMaterial = GetComponent<Renderer>().material;
+            GameObject[] cutObjs = MeshCut.Cut(gameObject, anchorPoint, normalDirection, capMaterial);
+            cutObjs[0].AddComponent<Rigidbody>();
+            Destroy(cutObjs[0].GetComponent<BoxCollider>());
+            cutObjs[0].AddComponent<BoxCollider>();
+            
+            cutObjs[1].AddComponent<Rigidbody>();
+            cutObjs[1].AddComponent<BoxCollider>();
+            cutObjs[1].AddComponent<EnemyController>().capMaterial = capMaterial;
+            Destroy(cutObjs[0], 1.0f);
+            Destroy(cutObjs[1], 1.0f);
+            OnFinishedDefeat?.Invoke();
         }
         
         private void AppearAnimationEnd()

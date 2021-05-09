@@ -110,6 +110,11 @@ namespace ProjectS
         {
             _enableAddEnemy = false;
         }
+
+        public override void Cut()
+        {
+            
+        }
         
         #endregion
     }
